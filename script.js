@@ -7,16 +7,35 @@ let time;
 
 WebFont.load({
     google: {
-      families: ["Teko:300"]
+      families: ["Teko:300","Red+Hat+Mono:500"]
     },
-    active: setup
+    timeout: 3000,
+    active: setup,
+    fontinactive: setupWithInactive,
 });
 
 import {renderNavTools, renderPlanets, renderPlayer } from "./modules/renderFunctions.js";
-import {text} from "./modules/text.js";
+import {text, useBackupFonts} from "./modules/text.js";
 import {planets, radiusMultiplier, gravityMultiplier, rotationMultiplier, atmosphereMultipier} from "./modules/planets.js";
 import {playerMovement, colisions, gravity, moveCamera, movePlanets} from "./modules/movement.js"
 import {keys,player,camera, units} from "./modules/objects.js";
+
+
+function setup(){
+    time = Date.now();
+    setCanvas();
+    window.onresize = setCanvas;
+    requestAnimationFrame(loop);
+}
+
+function setupWithInactive(){
+    let fonts = [];
+    fonts["Teko"] = "Tahoma, Helvetica, sans-serif";
+    fonts["Red Hat Mono"] = "'Courier New', Courier, monospace"
+    console.error("failed to load fonts");
+    useBackupFonts(fonts);
+    setup();
+}
 
 function setCanvas(){
     let dpr = devicePixelRatio || 1;
@@ -144,11 +163,4 @@ function render(){
     renderPlanets(c,planets,camera,units,radiusMultiplier, gravityMultiplier, atmosphereMultipier);
     renderPlayer(c,player,camera,keys,units);
     renderNavTools(c,player,camera,planets,text,units,radiusMultiplier);
-}
-
-function setup(){
-    time = Date.now();
-    setCanvas();
-    window.onresize = setCanvas;
-    requestAnimationFrame(loop);
 }

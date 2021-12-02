@@ -19,6 +19,8 @@
         }
         body,html{
             overflow: hidden;
+            width: 100vw;
+            height: 100vh;
         }
         canvas{
             width: 100vw;
@@ -33,10 +35,43 @@
             right: 1em;
             z-index: 1;
         }
+        .spinner{
+            z-index: -1;
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            top: calc(50% - 50px);
+            left: calc(50% - 50px);
+            border-radius: 100px;
+            border: 10px solid lightgray;
+            clip-path: polygon(49% 43%, 100% 0, 100% 100%, 0 100%, 0 0);
+            animation: spin 600ms ease-in-out infinite;
+        }
+        p{
+            z-index: -1;
+            position: absolute;
+            top: calc(50% + 75px);
+            left: 50%;
+            width: max-content;
+            height: max-content;
+            transform: translate(-50%,-50%);
+            color: lightgray;
+            font-weight: 800;
+        }
+        @keyframes spin {
+            from{
+                transform: rotate(0deg);
+            }
+            to{
+                transform: rotate(360deg);
+            }
+        }
     </style>
     <title>canvas</title>
 </head>
 <body>
+    <div class="spinner"></div>
+    <p aria-hidden>Loading Reasources</p>
     <!-- test comment -->
     <!-- <p>Modified rocket icon from <a href="https://fontawesome.com/v5.15/icons/space-shuttle?style=solid">fontawesome</a>. <a href="https://fontawesome.com/license">License</a></p> -->
 </body>

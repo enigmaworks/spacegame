@@ -3,10 +3,22 @@ window.onload = ()=>{
     c = document.getElementById("canvas").getContext('2d');
 }
 
+let useBackups = false;
+let backups;
+
+export function useBackupFonts(backupFontsList){
+    useBackups = true;
+    backups = backupFontsList;
+}
 export function text(str, x, y, styles = {}){
     let cl = styles.color ||  "#ccc"; //fallback styles if none are provided
     let sz = styles.size || 22;
-    let f = styles.font || "Teko, sans-serif";
+    let f;
+    if(useBackups){
+        f = backups[styles.font] || "Teko, sans-serif";
+    } else {
+        f = styles.font || "Teko, sans-serif";
+    }
     let w = styles.weight || "400";
     let a = styles.align || "center";
     let st = styles.style || "normal";
