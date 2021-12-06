@@ -79,12 +79,12 @@ export function gravity(player,planets,units,radiusMultiplier, gravityMultiplier
     player.currentType = " ";
     player.currentMakeup = " ";
     player.distToPlanet = 0;
-    Object.values(planets).forEach((planet)=>{
+    Object.values(planets).forEach((planet, id)=>{
         let dist = units.distance(planet.x,planet.y,player.x,player.y);
         let gravityDistance = player.collisionRadius + ((planet.size * radiusMultiplier) * gravityMultiplier);
         if(dist <= gravityDistance){
             player.currentPlanet = planet.name;
-            player.currentPlanetId = planet.id;
+            player.currentPlanetId = id;
             player.currentType = planet.type;
             player.currentMakeup = planet.makeup;
             let xDist = units.distance(player.x,0,planet.x,0);
@@ -121,13 +121,15 @@ export function gravity(player,planets,units,radiusMultiplier, gravityMultiplier
                     angle = (Math.PI) - angle;
                 }
             }
-            if (Math.abs(angle) > Math.PI * 2){
-                angle = Math.abs(angle) - (Math.PI * 2);
+            let deltaAngle = player.direction - units.toDeg(angle);
+            let radDirection = units.toRad(player.direction);
+            let sines = Math.sin(radDirection) + Math.sin(angle);
+            let cossines = Math.cos(radDirection) + Math.cos(angle);
+            let rotationInfluence = Math.atan2(sines/2, cossines/2);
+            if(deltaAngle < 180){
+                rotationInfluence *= -1;
             }
-            if (angle < 0){
-                angle = (Math.PI * 2) - Math.abs(angle);
-            }
-            let gravityStregnth = (((planet.size ** 2.1) * .9) / (dist*2)) + 0.7;
+           let gravityStregnth = (((planet.size ** 2.2) * .9) / (dist*2)) + 0.7;
             player.xMomentum += xGravity * gravityStregnth;
             player.yMomentum += yGravity * gravityStregnth;
             player.xGravity = xGravity;
@@ -144,8 +146,8 @@ export function moveCamera(player,camera,change){
 
 export function movePlanets(planets,change,rotationMultiplier){
     Object.values(planets).forEach((planet)=>{
-        let multiplier = 0.0001;
-        planet.rotation += (change*multiplier)*(rotationMultiplier/planet.size);
+        let multiplier = 0.01;
+        // planet.rotation += (change*multiplier)*(rotationMultiplier/planet.size);
         if (Math.abs(planet.direction) > 360){
             planet.rotation = Math.abs(planet.direction) - 360;
         }

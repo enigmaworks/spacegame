@@ -21,9 +21,8 @@ export let atmosphereMultipier = 2;
  *  f: "color" || img-element || {stop: {s: number, c: "color"} ...}}
  * atmosphere: "color"
 */
-export let planets = {
-    "A": {
-        id: 0,
+export let planets = [
+    {
         size: 28,
         x: 0,
         y: 500,
@@ -40,8 +39,7 @@ export let planets = {
         stroke: "white",
         atmosphere: "aqua"
     },
-    "1":{
-        id: 1,
+    {
         size: 30,
         x: 3000,
         y: -1000,
@@ -58,8 +56,7 @@ export let planets = {
         stroke: "white",
         atmosphere: "orange"
     },
-    "2":{
-        id: 2,
+    {
         size: 26,
         x: 6000,
         y: -4300,
@@ -76,8 +73,7 @@ export let planets = {
         stroke: "white",
         atmosphere: "indigo"
     },
-    "3":{
-        id: 3,
+    {
         size: 22,
         x: -2300,
         y: 1100,
@@ -94,4 +90,4 @@ export let planets = {
         stroke: "white",
         atmosphere: "sandybrown"
     },
-}
+]
