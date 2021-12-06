@@ -112,5 +112,32 @@ export function roundedRect(c, x, y, width, height, options={}) {
     },
     distance: function(x1,y1,x2,y2){
         return Math.sqrt(((x1-x2)**2) + ((y1-y2)**2));
-    }
+    },
+    direction: function(x1,y1,x2,y2){
+        let xDist = units.distance(x1,0,x2,0);
+        let yDist = units.distance(0,y1,0,y2);
+        let dist = Math.sqrt((xDist**2)+(yDist**2));
+        let angle = 0;
+        if(((x1 > x2) && (y1 > y2))
+            || ((x1 < x2) && (y1 < y2))
+        ){
+            angle = Math.atan(xDist/yDist);
+        } else {
+            angle = Math.atan(yDist/xDist);
+        }
+        if(x1 > x2){
+            if(y1 > y2){
+                angle = (Math.PI*2) - angle;
+            } else {
+                angle = (Math.PI*1.5) - angle;
+            }
+        } else {
+            if(y1 > y2){
+                angle = (Math.PI / 2) - angle;
+            } else {
+                angle = (Math.PI) - angle;
+            }
+        }
+        return angle;
+    },
 }
