@@ -14,11 +14,44 @@ WebFont.load({
     fontinactive: setupWithInactive,
 });
 
-import {renderNavTools, renderPlanets, renderPlayer } from "./modules/renderFunctions.js";
-import {text, useBackupFonts} from "./modules/text.js";
-import {planets, radiusMultiplier, gravityMultiplier, rotationMultiplier, atmosphereMultipier} from "./modules/planets.js";
-import {playerMovement, colisions, gravity, moveCamera, movePlanets} from "./modules/movement.js"
-import {keys,player,camera, units} from "./modules/objects.js";
+
+import {
+    minimap,
+    renderNavTools,
+    renderPlanets,
+    renderPlayer,
+    renderStars,
+} from "./modules/renderFunctions.js";
+
+import {
+    roundedRect,
+    text,
+    useBackupFonts,
+    units,
+} from "./modules/utils.js";
+
+import {
+    planets,
+    radiusMultiplier,
+    gravityMultiplier,
+    rotationMultiplier,
+    atmosphereMultipier
+} from "./modules/planets.js";
+
+import {
+    playerMovement,
+    colisions,
+    gravity,
+    moveCamera,
+    movePlanets
+} from "./modules/movement.js";
+
+import {
+    keys,
+    player,
+    camera
+} from "./modules/objects.js";
+
 
 
 function setup(){
@@ -112,13 +145,6 @@ function update(change){
     moveCamera(player,camera,change);
     render();
 }
-
-let stars = [];
-for(let i = 0; i<90000; i++){
-    let obj = {x: Math.random(), y: Math.random(),alpha:Math.random()};
-    stars.push(obj);
-}
-
 function render(){
     c.clearRect(-units.xmax,-units.ymax, canvas.width,canvas.height)
     let universe = c.createLinearGradient(0,-units.ymax, units.xmax + 200,0);
@@ -128,39 +154,10 @@ function render(){
     universe.addColorStop(1, "#01110b");
     c.fillStyle = universe;
     c.fillRect(-units.xmax,-units.ymax,canvas.width,canvas.height);
-    c.fillStyle = "white";
-    c.save();
-    stars.forEach((star,num)=>{
-        let xPos = ((star.x * 3500) - 3500/2) * 2;
-        let yPos = ((star.y * 3500) - 3500/2) * 2;
-        let size;
-        if(num % 100 === 0){
-            xPos -= camera.x/10;
-            yPos -= camera.y/10;
-            size = 1.25;
-        } else if (num % 50 === 0) {
-            xPos -= camera.x/18;
-            yPos -= camera.y/18;
-            size = 1;
-        } else if (num % 6 === 0){
-            xPos -= camera.x/36;
-            yPos -= camera.y/36;
-            size = .75;
-        } else {
-           xPos -= camera.x/42;
-           yPos -= camera.y/42;
-           size = 0.5;
-        }
-        if(!((xPos > units.xmax) || (xPos < -units.xmax) || (yPos > units.ymax) || (yPos < -units.ymax))){
-            c.globalAlpha = star.alpha + 0.1;
-            c.beginPath();
-            c.arc(xPos,yPos,size,0,Math.PI*2)
-            c.fill();
-        }
-    })
-    c.restore();
 
+    renderStars(c,camera, units);
     renderPlanets(c,planets,camera,units,radiusMultiplier, gravityMultiplier, atmosphereMultipier);
     renderPlayer(c,player,camera,keys,units);
-    renderNavTools(c,player,camera,planets,text,units,radiusMultiplier);
+    // renderNavTools(c,player,camera,planets,text,units,radiusMultiplier);
+    minimap({size: 75, offset: 25, zoom: 25},c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier);
 }
