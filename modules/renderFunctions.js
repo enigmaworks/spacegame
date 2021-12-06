@@ -50,118 +50,77 @@ export function renderNavTools(c,player,camera,planets,text,units,radiusMultipli
     let avgSpeed = Math.round(player.speed*100)/100;
     let formatter = new Intl.NumberFormat("en-US", {minimumIntegerDigits: 3,minimumFractionDigits: 2});
     avgSpeed = formatter.format(avgSpeed)
-    text(`X: ${roundedX}`, -units.xmax + 10,-units.ymax + 30,{align: "left",font: "teko"})
-    text(`Y: ${-roundedY}`, -units.xmax + 10,-units.ymax + 50,{align: "left"})
-    text(`Speed: ${avgSpeed}`, -units.xmax + 140,-units.ymax + 40,{align: "left"})
-    text(`Engine Boost: ${player.speedMultiplier}`, -units.xmax + 300,-units.ymax + 40,{align: "left"})
+    text(`X: ${roundedX}`, -units.xmax + 10,-units.ymax + 30,{align: "left", font: "Red Hat Mono", size: 15})
+    text(`Y: ${-roundedY}`, -units.xmax + 10,-units.ymax + 50,{align: "left", font: "Red Hat Mono", size: 15})
+    text(`Speed: ${avgSpeed}`, -units.xmax + 160,-units.ymax + 40,{align: "left", font: "Red Hat Mono", size: 15})
     text(`${player.currentPlanet}`, -units.xmax + 10,-units.ymax + 90,{align: "left", weight: 800, color: "white"})
     // text(player.currentMakeup, -units.xmax + 15,-units.ymax + 115,{align: "left", maxwidth: 250})
 
-    //compass
+    /*          COMPASS             */
+    //compass base
     c.beginPath();
-    c.arc(-units.xmax + 110, -units.ymax + 38, 15,0,Math.PI*2);
-    c.fillStyle = "hsla(0,0%,100%,.3)";
+    c.arc(-units.xmax + 130, -units.ymax + 38, 15,0,Math.PI*2);
     c.strokeStyle = "white";
+    c.fillStyle="#0006";
     c.stroke();
     c.fill();
+    c.closePath();
+    // compass arrow
     c.save();
-    c.translate(-units.xmax + 110, -units.ymax + 38);
+    c.translate(-units.xmax + 130, -units.ymax + 38); //center of compass
     c.rotate(units.toRad(player.direction));
     c.beginPath();
-    c.moveTo(-4,-7);
-    c.lineTo(0,7);
+    c.moveTo(-4,-7); //triangle path
+    c.lineTo(0,5);
     c.lineTo(4,-7);
     c.strokeStyle = "white";
-    c.fillStyle = "hsla(0,0%,100%,.3)";
-    c.lineWidth = 2;
-    c.lineCap = "round";
-    c.fill();
-    c.stroke();
-    c.restore();
-    //map
-    c.save();
-    c.translate(-units.xmax + 90,units.ymax - 90);
-    c.fillStyle = "hsla(0,100%,0%,0.8)"
-    c.rect(-75,-75,150,150)
+    c.fillStyle = "white";
+    c.lineWidth = 3;
     c.stroke();
     c.fill();
-    let ratio = 1/100;
-    Object.values(planets).forEach((planet)=>{
-        c.save();
-        c.translate(planet.x*ratio,planet.y*ratio);
-        c.rotate(units.toRad(planet.rotation));
-        c.beginPath();
-        c.moveTo(0,0);
-        let size = (planet.size * radiusMultiplier) * ratio;
-        let fill = "#888";
-        if(planet.fill.type === "color"){
-            fill = planet.fill.f;
-        }
-        if(planet.fill.type === "img"){
-            fill = c.createPattern(planet.fill.f, "no-repeat");
-        }
-        if(planet.fill.type === "gradient"){
-            let rad = planet.size * radiusMultiplier
-            fill = c.createLinearGradient(size,size,-size,-size);
-            Object.values(planet.fill.f).forEach((stop)=>{
-                fill.addColorStop(stop.s,stop.c);
-            });
-        }
-        c.fillStyle = fill;
-        c.arc(0,0,size,0,Math.PI*2);
-        c.fill();
-        c.restore();
-    });
-    if(Math.abs(camera.x * ratio) > 76 || Math.abs(camera.y * ratio) > 76){
-        let x = 75;
-        let y = 75;
-        if(camera.x * ratio < -75){
-            x = -75;
-        } else if (Math.abs(camera.x * ratio) < 75){
-            x = camera.x * ratio;
-        }
-        if(camera.y * ratio < -75){
-            y = -75;
-        } else if (Math.abs(camera.y * ratio) < 75){
-            y = camera.y * ratio;
-        }
-        c.translate(x,y);
-        c.beginPath();
-        c.fillStyle = "red";
-        c.arc(0,0,3,0,Math.PI*2);
-        c.fill();
-    } else {
-        c.translate(camera.x * ratio,camera.y * ratio);
-        c.rotate(units.toRad(player.direction));
-        c.rotate(Math.PI/2);
-        c.drawImage(sprite,-2,-3,6,6);
-    }
+    c.closePath();
     c.restore();
-
 }
 
 export function renderPlanets(c,planets,camera,units,radiusMultiplier, gravityMultiplier,atmosphereMultiplier,renderGravity = false){
-    Object.values(planets).forEach((planet)=>{
+    Object.values(planets).forEach((planet)=>{ //iterate over each planet
         c.save();
-        let screenX = planet.x - camera.x;
+        //transform world coordinates to screen coordinates
+        let screenX = planet.x - camera.x; 
         let screenY = planet.y - camera.y;
+        //set drawing origin and rotation
         c.translate(screenX,screenY);
         c.rotate(units.toRad(planet.rotation));
+
+        // debugging function
         if(renderGravity){
             c.beginPath();
-            c.arc(0,0,(((planet.size * 1.2) * radiusMultiplier) * gravityMultiplier + 100),0,Math.PI*2);
+            c.arc(0,0,((planet.size * radiusMultiplier) * gravityMultiplier),0,Math.PI*2);
             c.fillStyle = "hsla(0,100%,60%,.2)";
             c.fill();
         }
+
+        // partially transparent atmosphere
         let atmosphereRadius = planet.size * radiusMultiplier * atmosphereMultiplier + 100;
-        let atmosphere = c.createRadialGradient(0,0,planet.size * radiusMultiplier,0,0,atmosphereRadius);
-        atmosphere.addColorStop(0,"hsla(0,0%,0%,0)");
-        // atmosphere.addColorStop(0.05,planet.atmosphere);
+        let atmosphere = c.createRadialGradient(0,0,(planet.size * radiusMultiplier) - 80,0,0,atmosphereRadius);
+        atmosphere.addColorStop(0.05,planet.atmosphere);
         atmosphere.addColorStop(1,"hsla(0,0%,0%,0)");
+        let preAtmosphere = c.createRadialGradient(0,0,planet.size * radiusMultiplier,0,0,atmosphereRadius);
+        preAtmosphere.addColorStop(0,"#0a0a24");
+        preAtmosphere.addColorStop(0.75,"hsla(0,0%,0%,0)");
+        c.fillStyle = preAtmosphere;
+        c.globalAlpha = .75;
+        c.beginPath();
+        c.arc(0,0,planet.size * radiusMultiplier * atmosphereMultiplier, 0, Math.PI * 2);
+        c.fill();
+        c.globalAlpha = .2;
         c.fillStyle = atmosphere;
         c.beginPath();
         c.arc(0,0,planet.size * radiusMultiplier * atmosphereMultiplier, 0, Math.PI * 2);
         c.fill();
+        c.globalAlpha = 1;
+
+        //fill planet
         let fill = "#888";
         if(planet.fill.type === "color"){
             fill = planet.fill.f;
@@ -182,4 +141,130 @@ export function renderPlanets(c,planets,camera,units,radiusMultiplier, gravityMu
         c.fill();
         c.restore();
     });
+}
+
+export function minimap(settings = {},c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier){
+    let size = settings.size || 75;
+    let offset = settings.offset || 25;
+    let zoom = settings.zoom || 10;
+
+    c.save();
+    c.translate(-units.xmax + (offset + size),units.ymax - (offset + size)); // bottom left of screen
+    c.beginPath();
+    c.strokeStyle = "#fffb"
+    c.fillStyle = "#000d" // semitransparent black
+    c.rect(-size,-size,size*2,size*2)
+    c.stroke();
+    c.fill();
+
+    let roundedX = Math.round(player.x);
+    let roundedY = Math.round(player.y);
+    text(`X: ${roundedX}`, -size + 5,-size + 5,{align: "left", baseline: "top", font: "Red Hat Mono", size: 12})
+    text(`Y: ${-roundedY}`, size -5,-size + 5,{align: "right", baseline: "top", font: "Red Hat Mono", size: 12})
+    
+    let region = new Path2D();
+    region.rect(-size,-size,size*2,size*2);
+    c.clip(region);
+    
+    let ratio = 1/zoom; // screen pixels per map pixel
+
+    let cx = camera.x * ratio;
+    let cy = camera.y * ratio;
+
+    Object.values(planets).forEach((planet)=>{
+        let px = (planet.x * ratio) - cx;
+        let py =( planet.y * ratio) - cy;
+        let planetRadius = (planet.size * radiusMultiplier) * ratio
+        if((px + (planetRadius * gravityMultiplier) > -size) &&
+            (px - (planetRadius * gravityMultiplier) < size) &&
+            (py + (planetRadius * gravityMultiplier) > -size) &&
+            (py - (planetRadius * gravityMultiplier) < size) ){
+            c.save();
+
+            c.translate(px, py); // center of planet on map
+            c.rotate(units.toRad(planet.rotation));
+            c.beginPath();
+            c.moveTo(0,0);
+
+            c.beginPath();
+            c.arc(0,0,planetRadius * gravityMultiplier,0,Math.PI*2);
+            c.strokeStyle = "lightgray";
+            c.lineWidth = .75;
+            c.globalAlpha = .5;
+            c.stroke();
+
+            let fill = "#888"; // backup fill
+            if(planet.fill.type === "color"){
+                fill = planet.fill.f;
+            }
+            if(planet.fill.type === "img"){
+                fill = c.createPattern(planet.fill.f, "no-repeat");
+            }
+            if(planet.fill.type === "gradient"){
+                let rad = planet.size * radiusMultiplier;
+                //create gradient from corner to corner of planet bounding box
+                fill = c.createLinearGradient(size,size,-size,-size);
+                Object.values(planet.fill.f).forEach((stop)=>{
+                    fill.addColorStop(stop.s,stop.c);
+                });
+            }
+            c.fillStyle = fill; 
+            c.beginPath();
+            if (planet.id === player.currentPlanetId) c.globalAlpha = 1;
+            else c.globalAlpha = .5;
+            c.arc(0,0,planetRadius,0,Math.PI*2);
+            c.fill();
+            c.closePath();
+            
+            c.globalAlpha = 1;
+            text(planet.name, 0,0, {align: "center", baseline: "alphabetic",size: (planet.size/planet.name.length)/2 + 7, color: "white", maxwidth: planetRadius});
+
+            c.restore();
+        }
+    });
+
+    c.rotate(units.toRad(player.direction));
+    c.rotate(Math.PI/2);
+    c.drawImage(sprite,-2,-3,6,6);
+    c.restore();
+}
+
+let stars = [];
+for(let i = 0; i<90000; i++){
+    let obj = {x: Math.random(), y: Math.random(),alpha:Math.random()};
+    stars.push(obj);
+}
+
+export function renderStars(c,camera,units){
+    c.fillStyle = "white";
+    c.save();
+    stars.forEach((star,num)=>{
+        let xPos = ((star.x * 3500) - 3500/2) * 2;
+        let yPos = ((star.y * 3500) - 3500/2) * 2;
+        let size;
+        if(num % 100 === 0){
+            xPos -= camera.x/8;
+            yPos -= camera.y/8;
+            size = 1.25;
+        } else if (num % 50 === 0) {
+            xPos -= camera.x/16;
+            yPos -= camera.y/16;
+            size = 1;
+        } else if (num % 6 === 0){
+            xPos -= camera.x/24;
+            yPos -= camera.y/24;
+            size = .75;
+        } else {
+           xPos -= camera.x/48;
+           yPos -= camera.y/48;
+           size = 0.5;
+        }
+        if(!((xPos > units.xmax) || (xPos < -units.xmax) || (yPos > units.ymax) || (yPos < -units.ymax))){
+            c.globalAlpha = star.alpha + 0.1;
+            c.beginPath();
+            c.arc(xPos,yPos,size,0,Math.PI*2)
+            c.fill();
+        }
+    })
+    c.restore();
 }
