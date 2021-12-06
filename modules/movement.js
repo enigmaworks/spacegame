@@ -6,7 +6,6 @@ export function playerMovement(change,player,keys){
     } else {
         player.rotationMomentum *= .97;
     }
-    player.speed = Math.sqrt((player.xMomentum**2) + (player.yMomentum**2));
     let speedMultiplier;
     if(keys.up){
         if(keys.space){
@@ -15,38 +14,38 @@ export function playerMovement(change,player,keys){
             speedMultiplier = player.engineSpeed;
         }
         player.speedMultiplier = speedMultiplier;
-            if(player.direction === 0 || player.direction === 360){
-                player.yMomentum += 1 * speedMultiplier;
-            } else if(player.direction === 90){
-                player.xMomentum -= 1 * speedMultiplier;
-            } else if(player.direction === 180){
-                player.yMomentum -= 1 * speedMultiplier;
-            } else if(player.direction === 270){
-                player.xMomentum += 1 * speedMultiplier;
-            } else if(player.direction < 90 && player.direction > 0){
-                player.xMomentum += Math.cos((player.direction - 90) * (Math.PI/180)) * -1 * speedMultiplier;
-                player.yMomentum += Math.sin((player.direction - 90) * (Math.PI/180)) * -1 * speedMultiplier;
-            } else if(player.direction < 180 && player.direction > 90){
-                player.xMomentum += Math.sin((player.direction - 180) * (Math.PI/180)) * speedMultiplier;
-                player.yMomentum += Math.cos((player.direction - 180) * (Math.PI/180)) * -1 * speedMultiplier;
-            } else if(player.direction < 270 && player.direction > 180){
-                player.xMomentum += Math.cos((player.direction - 270) * (Math.PI/180)) * speedMultiplier;
-                player.yMomentum += Math.sin((player.direction - 270) * (Math.PI/180)) * speedMultiplier;
-            } else if(player.direction < 360 && player.direction > 270){
-                player.xMomentum += Math.sin((player.direction - 360) * (Math.PI/180)) * -1 * speedMultiplier;
-                player.yMomentum += Math.cos((player.direction - 360) * (Math.PI/180)) * speedMultiplier;
-            }
+        if(player.direction === 0 || player.direction === 360){
+            player.yMomentum += 1 * speedMultiplier;
+        } else if(player.direction === 90){
+            player.xMomentum -= 1 * speedMultiplier;
+        } else if(player.direction === 180){
+            player.yMomentum -= 1 * speedMultiplier;
+        } else if(player.direction === 270){
+            player.xMomentum += 1 * speedMultiplier;
+        } else if(player.direction < 90 && player.direction > 0){
+            player.xMomentum += Math.cos((player.direction - 90) * (Math.PI/180)) * -1 * speedMultiplier;
+            player.yMomentum += Math.sin((player.direction - 90) * (Math.PI/180)) * -1 * speedMultiplier;
+        } else if(player.direction < 180 && player.direction > 90){
+            player.xMomentum += Math.sin((player.direction - 180) * (Math.PI/180)) * speedMultiplier;
+            player.yMomentum += Math.cos((player.direction - 180) * (Math.PI/180)) * -1 * speedMultiplier;
+        } else if(player.direction < 270 && player.direction > 180){
+            player.xMomentum += Math.cos((player.direction - 270) * (Math.PI/180)) * speedMultiplier;
+            player.yMomentum += Math.sin((player.direction - 270) * (Math.PI/180)) * speedMultiplier;
+        } else if(player.direction < 360 && player.direction > 270){
+            player.xMomentum += Math.sin((player.direction - 360) * (Math.PI/180)) * -1 * speedMultiplier;
+            player.yMomentum += Math.cos((player.direction - 360) * (Math.PI/180)) * speedMultiplier;
+        }
     }
-
-    let multiplier = 0.004;
-    multiplier *= change;
+    
+    let multiplier = 0.001;
     let rotateMultiplier = 0.005 * change;
+    multiplier *= change;
+    player.speed = Math.sqrt((player.xMomentum**2) + (player.yMomentum**2));
     player.direction += player.rotationMomentum * rotateMultiplier;
     player.x += player.xMomentum * multiplier;
     player.y += player.yMomentum * multiplier;
-    player.xMomentum *= .999 - change * 0.001;
-    player.yMomentum *= .999 - change * 0.001;
-
+    player.xMomentum *= .999;
+    player.yMomentum *= .999;
 
     if (Math.abs(player.direction) > 360){
         player.direction = Math.abs(player.direction) - 360;
@@ -76,14 +75,16 @@ export function colisions(player,planets,units,planetSizeMultiplpier){
 }
 export function gravity(player,planets,units,radiusMultiplier, gravityMultiplier){
     player.currentPlanet = " ";
+    player.currentPlanetId = null;
     player.currentType = " ";
     player.currentMakeup = " ";
     player.distToPlanet = 0;
     Object.values(planets).forEach((planet)=>{
         let dist = units.distance(planet.x,planet.y,player.x,player.y);
-        let gravityDistance = player.collisionRadius + (((planet.size * 1.2) * radiusMultiplier) * gravityMultiplier + 100);
+        let gravityDistance = player.collisionRadius + ((planet.size * radiusMultiplier) * gravityMultiplier);
         if(dist <= gravityDistance){
             player.currentPlanet = planet.name;
+            player.currentPlanetId = planet.id;
             player.currentType = planet.type;
             player.currentMakeup = planet.makeup;
             let xDist = units.distance(player.x,0,planet.x,0);
@@ -95,28 +96,36 @@ export function gravity(player,planets,units,radiusMultiplier, gravityMultiplier
             if(((player.x > planet.x) && (player.y > planet.y))
                 || ((player.x < planet.x) && (player.y < planet.y))
             ){
-                angle = units.toDeg(Math.atan(xDist/yDist));
-                xGravity = Math.sin(units.toRad(angle));
-                yGravity = Math.cos(units.toRad(angle));
+                angle = Math.atan(xDist/yDist);
+                xGravity = Math.sin(angle);
+                yGravity = Math.cos(angle);
             } else {
-                angle = units.toDeg(Math.atan(yDist/xDist));
-                xGravity = Math.cos(units.toRad(angle));
-                yGravity = Math.sin(units.toRad(angle));
+                angle = Math.atan(yDist/xDist);
+                xGravity = Math.cos(angle);
+                yGravity = Math.sin(angle);
             }
             if(player.x > planet.x){
                 if(player.y > planet.y){
-                    // 0 < angle < 90
+                    angle = (Math.PI*2) - angle;
                     xGravity *= -1;
                     yGravity *= -1;
                 } else {
-                    // 90 < angle < 180
+                    angle = (Math.PI*1.5) - angle;
                     xGravity *= -1;
                 }
             } else {
                 if(player.y > planet.y){
-                    // 270 < angle < 360
+                    angle = (Math.PI / 2) - angle;
                     yGravity *= -1; 
+                } else {
+                    angle = (Math.PI) - angle;
                 }
+            }
+            if (Math.abs(angle) > Math.PI * 2){
+                angle = Math.abs(angle) - (Math.PI * 2);
+            }
+            if (angle < 0){
+                angle = (Math.PI * 2) - Math.abs(angle);
             }
             let gravityStregnth = (((planet.size ** 2.1) * .9) / (dist*2)) + 0.7;
             player.xMomentum += xGravity * gravityStregnth;
