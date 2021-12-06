@@ -15,13 +15,11 @@ WebFont.load({
 });
 
 
-import {
-    minimap,
-    renderNavTools,
-    renderPlanets,
-    renderPlayer,
-    renderStars,
-} from "./modules/renderFunctions.js";
+import { minimap} from "./modules/renderers/minimap.js";
+import { renderNavTools} from "./modules/renderers/navui.js";
+import { renderPlanets} from "./modules/renderers/planet.js";
+import { renderPlayer} from "./modules/renderers/player.js";
+import { renderStars} from "./modules/renderers/stars.js";
 
 import {
     roundedRect,
@@ -159,5 +157,5 @@ function render(){
     renderPlanets(c,planets,camera,units,radiusMultiplier, gravityMultiplier, atmosphereMultipier);
     renderPlayer(c,player,camera,keys,units);
     // renderNavTools(c,player,camera,planets,text,units,radiusMultiplier);
-    minimap({size: 75, offset: 25, zoom: 25},c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier);
+    minimap({size: 100, offset: 15, zoom: 25}, 1,c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier);
 }
