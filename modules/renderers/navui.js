@@ -1,13 +1,13 @@
-export function renderNavTools(c,player,camera,planets,text,units,radiusMultiplier){
-    let roundedX = Math.round(player.x);
-    let roundedY = Math.round(player.y);
-    let avgSpeed = Math.round(player.speed*100)/100;
-    let formatter = new Intl.NumberFormat("en-US", {minimumIntegerDigits: 3,minimumFractionDigits: 2});
+export function renderNavTools(c,player,camera,planets,destination,text,units,radiusMultiplier){
+    let roundedX = Math.round(player.x / 10);
+    let roundedY = Math.round(player.y / 10);
+    let avgSpeed = Math.round(player.speed)/10;
+    let formatter = new Intl.NumberFormat("en-US", {minimumIntegerDigits: 4,minimumFractionDigits: 2, useGrouping: false});
     avgSpeed = formatter.format(avgSpeed)
-    text(`X: ${roundedX}`, -units.xmax + 10,-units.ymax + 30,{align: "left", font: "Red Hat Mono", size: 15})
-    text(`Y: ${-roundedY}`, -units.xmax + 10,-units.ymax + 50,{align: "left", font: "Red Hat Mono", size: 15})
-    text(`Speed: ${avgSpeed}`, -units.xmax + 160,-units.ymax + 40,{align: "left", font: "Red Hat Mono", size: 15})
-    text(`${player.currentPlanet}`, -units.xmax + 10,-units.ymax + 90,{align: "left", weight: 800, color: "white"})
+    text(`${roundedX},`, units.xmax - 70,-units.ymax + 30,{align: "right", font: "Red Hat Mono", size: 15})
+    text(`${-roundedY}`, units.xmax - 70,-units.ymax + 30,{align: "left", font: "Red Hat Mono", size: 15})
+    // text(`velocity: ${avgSpeed}`, units.xmax - 40,-units.ymax + 60,{align: "right", font: "Red Hat Mono", size: 15})
+    // text(`${player.currentPlanet}`, units.xmax - 230,-units.ymax + 30,{align: "left", maxwidth: 200, color: "white"})
     // text(player.currentMakeup, -units.xmax + 15,-units.ymax + 115,{align: "left", maxwidth: 250})
 
     /*          COMPASS             */

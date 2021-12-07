@@ -5,9 +5,11 @@ canvas.id = "canvas";
 let c = canvas.getContext("2d");
 let time;
 
+let destinationSelect = document.querySelector("select")
+
 WebFont.load({
     google: {
-      families: ["Teko:300","Red+Hat+Mono:500"]
+      families: ["Teko:300","Red+Hat+Mono:400"]
     },
     timeout: 3000,
     active: setup,
@@ -57,6 +59,12 @@ function setup(){
     setCanvas();
     window.onresize = setCanvas;
     requestAnimationFrame(loop);
+    planets.forEach((planet, id)=>{
+        let option = document.createElement("option");
+        option.innerText = planet.name;
+        option.value = id;
+        destinationSelect.appendChild(option);
+    });
 }
 
 function setupWithInactive(){
@@ -156,6 +164,6 @@ function render(){
     renderStars(c,camera, units);
     renderPlanets(c,planets,camera,units,radiusMultiplier, gravityMultiplier, atmosphereMultipier);
     renderPlayer(c,player,camera,keys,units);
-    // renderNavTools(c,player,camera,planets,text,units,radiusMultiplier);
-    minimap({size: 100, offset: 15, zoom: 25}, 1,c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier);
+    minimap({size: 100, offset: 15, zoom: 25}, parseInt(destinationSelect.value),c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier);
+    renderNavTools(c,player,camera,planets,parseInt(destinationSelect.value),text,units,radiusMultiplier);
 }

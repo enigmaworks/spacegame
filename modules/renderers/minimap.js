@@ -15,11 +15,6 @@ export function minimap(settings = {},destination = null, c,player,camera,planet
     c.stroke();
     c.fill();
 
-    let roundedX = Math.round(player.x);
-    let roundedY = Math.round(player.y);
-    text(`X: ${roundedX}`, -size + 5,-size + 5,{align: "left", baseline: "top", font: "Red Hat Mono", size: 12})
-    text(`Y: ${-roundedY}`, size -5,-size + 5,{align: "right", baseline: "top", font: "Red Hat Mono", size: 12})
-    
     let inset = 0;
     let clip = new Path2D();
     clip.rect(-size - inset,-size - inset,size*2 +2*inset,size*2 + 2*inset);
@@ -30,10 +25,16 @@ export function minimap(settings = {},destination = null, c,player,camera,planet
     let cx = camera.x * ratio;
     let cy = camera.y * ratio;
 
-    let destX = (planets[destination].x * ratio) - cx;
-    let destY = (planets[destination].y * ratio) - cy;
-    let destDirection = units.direction(0,0,destX,destY);
-    let destDistance = units.distance(0,0,destX,destY);
+    let destX;
+    let destY;
+    let destDirection;
+    let destDistance;
+    if(planets[destination]){
+        destX = (planets[destination].x * ratio) - cx;
+        destY = (planets[destination].y * ratio) - cy;
+        destDirection = units.direction(0,0,destX,destY);
+        destDistance = units.distance(0,0,destX,destY);
+    }
 
     planets.forEach((planet,id)=>{
         let px = (planet.x * ratio) - cx;
@@ -62,7 +63,7 @@ export function minimap(settings = {},destination = null, c,player,camera,planet
                 fill = planet.fill.f;
             }
             if(planet.fill.type === "img"){
-                fill = c.createPattern(planet.fill.f, "no-repeat");
+                fill = c.createPattern(planet.fill.f, "repeat");
             }
             if(planet.fill.type === "gradient"){
                 let rad = planet.size * radiusMultiplier;
@@ -88,7 +89,7 @@ export function minimap(settings = {},destination = null, c,player,camera,planet
     c.save();
     c.rotate(units.toRad(player.direction));
     c.rotate(Math.PI/2);
-    c.drawImage(sprite,-zoom/11,-zoom/5,zoom/2.5,zoom/2.5);
+    c.drawImage(sprite,-40/zoom,-100/zoom,200/zoom,200/zoom);
     c.restore();
 
     let p = 5; //padding from edge
@@ -109,7 +110,7 @@ export function minimap(settings = {},destination = null, c,player,camera,planet
         x = destX;
         y = destY;
     }
-    let markerSize = 7/2**(destDistance/180);
+    let markerSize = 6/2**(destDistance/100);
     if(markerSize < .9) markerSize = .9;
     if (markerSize > 1.6) markerSize = 1.6;
     if(destDistance/40 - 1 < markerSize) markerSize = destDistance/40 - 1;

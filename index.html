@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" \>
     
     <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-
-    <script src="./script.js" type="module" defer></script>
     
+    <script src="./script.js" type="module" defer></script>
+  
     <!-- Primary Meta Tags -->
     <title>The Cosmos</title>
     <meta name="title" content="The Cosmos">
@@ -27,7 +27,7 @@
     <meta property="twitter:title" content="The Cosmos">
     <meta property="twitter:description" content="Blast your way through the cosmos, discovering planets and space stations in an original space sim!">
     <meta property="twitter:image" content="https://enigmaworks.github.io/spacegame/imgs/card.webp">
-    <style>
+   <style>
         *{
             margin: 0;
             box-sizing: border-box;
@@ -76,6 +76,15 @@
             color: lightgray;
             font-weight: 800;
         }
+        select{
+            position: absolute;
+            z-index: 1;
+            top: 1rem;
+            left: 1rem;
+            font-size: 1.15rem;
+            letter-spacing: .02em;
+            padding: .15em 1em;
+        }
         @keyframes spin {
             from{
                 transform: rotate(0deg);
@@ -85,9 +94,11 @@
             }
         }
     </style>
-    <title>canvas</title>
 </head>
 <body>
+    <select name="chooseplanet" id="planetchooser">
+        <option value="lol">select destination</option>
+    </select>
     <div class="spinner"></div>
     <p aria-hidden>Loading Reasources</p>
     <!-- test comment -->
