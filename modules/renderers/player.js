@@ -10,27 +10,27 @@ export function renderPlayer(c,player,camera,keys,units,hitbox=false){
     c.rotate(units.toRad(player.direction));
     c.rotate(Math.PI/2);
     let displacement = -player.size/3;
-    let rad = player.size * 0.1;
+    let rad = player.size * 0.12;
     if(keys.up){
-        let gradient = c.createLinearGradient(displacement,0,displacement*1.5,0);
+        let gradient = c.createLinearGradient(displacement,0,displacement*1.65,0);
         gradient.addColorStop(0,"hsl(25,100%,50%)")
         gradient.addColorStop(1,"hsla(0,0%,0%,0)");
         c.fillStyle = gradient;
         c.beginPath();
-        c.arc(displacement,3,rad,0,Math.PI*2);
+        c.arc(displacement - .5,displacement/5,rad,0,Math.PI*2);
         c.fill();
         c.beginPath();
-        c.arc(displacement,-3,rad,0,Math.PI*2);
+        c.arc(displacement - .5,-displacement/5,rad,0,Math.PI*2);
         c.fill();
         if(keys.space){
-            let gradient = c.createLinearGradient(displacement,0,displacement*2.5,0);
+            let gradient = c.createLinearGradient(displacement,0,displacement*2.85,0);
             gradient.addColorStop(0,"hsl(25,100%,50%)")
             gradient.addColorStop(1,"hsla(0,0%,0%,0)");
             c.fillStyle = gradient;
             c.beginPath(); 
-            c.moveTo(displacement,rad * 1.9);
-            c.lineTo(displacement*2.1,0);
-            c.lineTo(displacement,-rad * 1.9);
+            c.moveTo(displacement,rad * 1.3);
+            c.lineTo(displacement*2.75,0);
+            c.lineTo(displacement,-rad * 1.3);
             c.fill();
         }
     }

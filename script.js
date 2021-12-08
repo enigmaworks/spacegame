@@ -151,6 +151,7 @@ function update(change){
     moveCamera(player,camera,change);
     render();
 }
+let minimapsize = 100;
 function render(){
     c.clearRect(-units.xmax,-units.ymax, canvas.width,canvas.height)
     let universe = c.createLinearGradient(0,-units.ymax, units.xmax + 200,0);
@@ -164,6 +165,6 @@ function render(){
     renderStars(c,camera, units);
     renderPlanets(c,planets,camera,units,radiusMultiplier, gravityMultiplier, atmosphereMultipier);
     renderPlayer(c,player,camera,keys,units);
-    minimap({size: 100, offset: 15, zoom: 25}, parseInt(destinationSelect.value),c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier);
-    renderNavTools(c,player,camera,planets,parseInt(destinationSelect.value),text,units,radiusMultiplier);
+    minimap({size: minimapsize, offset: 15, zoom: 25}, parseInt(destinationSelect.value),c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier);
+    renderNavTools(c,player,camera,planets,parseInt(destinationSelect.value),minimapsize,text,units,radiusMultiplier);
 }

@@ -1,9 +1,10 @@
+let img = document.createElement("img");
+img.src = "../imgs/venustile.png";
 
-
-export let radiusMultiplier = 15;
-export let gravityMultiplier = 1.8;
+export let radiusMultiplier = 22;
+export let gravityMultiplier = 2;
 export let rotationMultiplier = 10;
-export let atmosphereMultipier = 2;
+export let atmosphereMultipier = 1.8;
 
 /*
  * size: number
@@ -25,13 +26,13 @@ export let planets = [
     {
         size: 28,
         x: 0,
-        y: 500,
+        y: 3800,
         rotation: 0,
         orbitX: 0,
         orbitY: 0,
         name: "I-Pasiphaë",
-        type: " ",
-        makeup: " ",
+        type: "",
+        makeup: "",
         fill: {type: "gradient", f: {
             stop1: {s:0,c:"aqua"},
             stop2:{s:1,c:"blue"},
@@ -41,8 +42,8 @@ export let planets = [
     },
     {
         size: 30,
-        x: 3000,
-        y: -1000,
+        x: 4000,
+        y: -1500,
         rotation: 0,
         orbitX: 0,
         orbitY: 0,
@@ -59,7 +60,7 @@ export let planets = [
     {
         size: 26,
         x: 6000,
-        y: -4300,
+        y: -6300,
         rotation: 0,
         orbitX: 0,
         orbitY: 0,
@@ -75,7 +76,7 @@ export let planets = [
     },
     {
         size: 22,
-        x: -2300,
+        x: -4300,
         y: 1100,
         rotation: 0,
         orbitX: 0,
@@ -90,4 +91,53 @@ export let planets = [
         stroke: "white",
         atmosphere: "sandybrown"
     },
+    {
+        size: 32,
+        x: 2222,
+        y: -5555,
+        rotation: 0,
+        orbitX: 0,
+        orbitY: 0,
+        name: "Frank's",
+        type: "",
+        makeup: "",
+        fill: {type: "gradient", f: {
+            stop1: {s:0,c:"darkgreen"},
+            stop2:{s:1,c:"green"},
+        }},
+        stroke: "white",
+        atmosphere: "green"
+    },
+    {
+        size: 39,
+        x: 9999,
+        y: -9999,
+        rotation: 0,
+        orbitX: 0,
+        orbitY: 0,
+        name: "Styx",
+        type: "",
+        makeup: "",
+        fill: {type: "gradient", f: {
+            stop1: {s:0,c:"teal"},
+            stop2:{s:1,c:"darkturquoise"},
+        }},
+        stroke: "white",
+        atmosphere: "teal"
+    },
+    {
+        size: 19,
+        x: 1,
+        y: 10600,
+        rotation: 0,
+        orbitX: 0,
+        orbitY: 0,
+        name: "Venus",
+        type: "",
+        makeup: "",
+        fill: {type: "img", f: img},
+        stroke: "white",
+        atmosphere: "orange"
+    },
+    
 ]

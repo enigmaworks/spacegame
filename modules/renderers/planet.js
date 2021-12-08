@@ -42,7 +42,7 @@ export function renderPlanets(c,planets,camera,units,radiusMultiplier, gravityMu
             fill = planet.fill.f;
         }
         if(planet.fill.type === "img"){
-            fill = c.createPattern(planet.fill.f, "no-repeat");
+            fill = c.createPattern(planet.fill.f, "repeat");
         }
         if(planet.fill.type === "gradient"){
             let rad = planet.size * radiusMultiplier

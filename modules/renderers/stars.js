@@ -8,20 +8,20 @@ export function renderStars(c,camera,units){
     c.fillStyle = "white";
     c.save();
     stars.forEach((star,num)=>{
-        let xPos = ((star.x * 3500) - 3500/2) * 2;
-        let yPos = ((star.y * 3500) - 3500/2) * 2;
+        let xPos = ((star.x * 4500) - 3500/2) * 2;
+        let yPos = ((star.y * 4500) - 3500/2) * 2;
         let size;
         if(num % 100 === 0){
-            xPos -= camera.x/8;
-            yPos -= camera.y/8;
+            xPos -= camera.x/12;
+            yPos -= camera.y/12;
             size = 1.25;
         } else if (num % 50 === 0) {
-            xPos -= camera.x/16;
-            yPos -= camera.y/16;
+            xPos -= camera.x/18;
+            yPos -= camera.y/18;
             size = 1;
         } else if (num % 6 === 0){
-            xPos -= camera.x/24;
-            yPos -= camera.y/24;
+            xPos -= camera.x/28;
+            yPos -= camera.y/28;
             size = .75;
         } else {
            xPos -= camera.x/48;
