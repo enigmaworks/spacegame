@@ -2,8 +2,8 @@
 export let player = {
     direction: 180,
     speed: 0,
-    engineSpeed: 2.5,
-    boosterSpeed: 3.75,
+    engineSpeed: 3.15,
+    boosterSpeed: 4,
     x: 0,
     y: 0,
     rotationMomentum: 0,
@@ -11,12 +11,25 @@ export let player = {
     yMomentum: 0,
     xGravity: 0,
     yGravity: 0,
-    angle: 0,
-    currentPlanet: "",
-    currentType: "",
-    currentMakeup: "",
     collisionRadius: 11,
-    size: 30,
+    currentPlanet: {
+        name: "",
+        type: "",
+        makeup: "",
+        id: 0,
+        distance: 0,
+        gravity: {
+            angle: 0,
+            strength: 0,
+            x: 0,
+            y: 0,
+        },
+    },
+    nearestPlanet: {
+        distance: Infinity,
+        id: null,
+    },
+    size: 32,
     speedMultiplier: 0,
 }
 

@@ -75,7 +75,7 @@ export function minimap(settings = {},destination = null, c,player,camera,planet
             }
             c.fillStyle = fill; 
             c.beginPath();
-            if (id === player.currentPlanetId) c.globalAlpha = 1;
+            if (id === player.currentPlanet.id) c.globalAlpha = 1;
             else c.globalAlpha = .4;
             c.arc(0,0,planetRadius,0,Math.PI*2);
             c.fill();

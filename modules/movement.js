@@ -74,22 +74,29 @@ export function colisions(player,planets,units,planetSizeMultiplpier){
     });
 }
 export function gravity(player,planets,units,radiusMultiplier, gravityMultiplier){
-    player.currentPlanet = " ";
-    player.currentPlanetId = null;
-    player.currentType = " ";
-    player.currentMakeup = " ";
-    player.distToPlanet = 0;
+    player.currentPlanet.name = "";
+    player.currentPlanet.id = null;
+    player.currentPlanet.makeup = "";
+    player.currentPlanet.type = "";
+    player.currentPlanet.distance = 0;
+    player.currentPlanet.gravity.angle = 0;
+    player.currentPlanet.gravity.strength = 0;
+    player.currentPlanet.gravity.x = 0;
+    player.currentPlanet.gravity.y = 0;
+    player.nearestPlanet.id = null;
+    player.nearestPlanet.distance = Infinity;
     Object.values(planets).forEach((planet, id)=>{
         let dist = units.distance(planet.x,planet.y,player.x,player.y);
         let gravityDistance = player.collisionRadius + ((planet.size * radiusMultiplier) * gravityMultiplier);
+        if(dist > player.nearestPlanet.distance){
+            player.nearestPlanet.id = id;
+            player.nearestPlanet.distance = planet;
+        }
         if(dist <= gravityDistance){
-            player.currentPlanet = planet.name;
-            player.currentPlanetId = id;
-            player.currentType = planet.type;
-            player.currentMakeup = planet.makeup;
             let xDist = units.distance(player.x,0,planet.x,0);
             let yDist = units.distance(0,player.y,0,planet.y);
-            player.distToPlanet = Math.sqrt((xDist**2)+(yDist**2)) - (player.collisionRadius + (planet.size * radiusMultiplier));
+            let planetdistance = Math.sqrt((xDist**2)+(yDist**2)) - (player.collisionRadius + (planet.size * radiusMultiplier));
+            
             let angle = 0;
             let xGravity = 0;
             let yGravity = 0;
@@ -129,7 +136,18 @@ export function gravity(player,planets,units,radiusMultiplier, gravityMultiplier
             if(deltaAngle < 180){
                 rotationInfluence *= -1;
             }
-           let gravityStregnth = (((planet.size ** 2.2) * .9) / (dist*2)) + 0.7;
+            let gravityStregnth = ((((planet.size ** 1.9) * radiusMultiplier/4) *  .75) / (dist*2)) + 0.7;
+            
+            player.currentPlanet.name = planet.name;
+            player.currentPlanet.id = id;
+            player.currentPlanet.makeup = planet.makeup;
+            player.currentPlanet.type = planet.type;
+            player.currentPlanet.distance = planetdistance;
+            player.currentPlanet.gravity.angle = angle;
+            player.currentPlanet.gravity.strength = gravityStregnth;
+            player.currentPlanet.gravity.x = xGravity;
+            player.currentPlanet.gravity.y = yGravity;
+
             player.xMomentum += xGravity * gravityStregnth;
             player.yMomentum += yGravity * gravityStregnth;
             player.xGravity = xGravity;

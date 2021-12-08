@@ -1,4 +1,4 @@
-export function renderNavTools(c,player,camera,planets,destination,text,units,radiusMultiplier){
+export function renderNavTools(c,player,camera,planets,destination,minimapsize,text,units,radiusMultiplier){
     let roundedX = Math.round(player.x / 10);
     let roundedY = Math.round(player.y / 10);
     let avgSpeed = Math.round(player.speed)/10;
@@ -9,6 +9,12 @@ export function renderNavTools(c,player,camera,planets,destination,text,units,ra
     // text(`velocity: ${avgSpeed}`, units.xmax - 40,-units.ymax + 60,{align: "right", font: "Red Hat Mono", size: 15})
     // text(`${player.currentPlanet}`, units.xmax - 230,-units.ymax + 30,{align: "left", maxwidth: 200, color: "white"})
     // text(player.currentMakeup, -units.xmax + 15,-units.ymax + 115,{align: "left", maxwidth: 250})
+
+    if(planets[player.nearestPlanet.id]){
+        console.log("yey");
+        let planet = planets[player.nearestPlanet.id];
+        text(planet.name, units.xmax - minimapsize*2 - 20, units.ymax - minimapsize*2);
+    }
 
     /*          COMPASS             */
     //compass base
