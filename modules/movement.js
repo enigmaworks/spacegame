@@ -1,8 +1,8 @@
 export function playerMovement(change,player,keys){
     if (keys.left){
-        player.rotationMomentum -= 2;
+        player.rotationMomentum -= 1;
     } else if (keys.right){
-        player.rotationMomentum += 2;
+        player.rotationMomentum += 1;
     } else {
         player.rotationMomentum *= .97;
     }
