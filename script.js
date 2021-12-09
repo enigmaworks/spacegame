@@ -52,6 +52,7 @@ import {
     camera
 } from "./modules/objects.js";
 
+import {AnimationHandler} from "./modules/animators.js";
 
 
 function setup(){
@@ -143,12 +144,24 @@ function loop(){
     requestAnimationFrame(loop);
 }
 
+let cll = true;
+
+let deepspace = AnimationHandler.create("deepsace", 0,1,500, {onEnd: ()=>{console.log("deepspace");}});
+
 function update(change){
     movePlanets(planets,change,rotationMultiplier);
     gravity(player,planets,units,radiusMultiplier, gravityMultiplier);
     playerMovement(change,player,keys);
     colisions(player,planets,units,radiusMultiplier);
     moveCamera(player,camera,change);
+    AnimationHandler.stepAll(change);
+    if(Math.abs(player.x) > 200000 || Math.abs(player.y) > 200000){
+        if(cll) {
+            AnimationHandler.trigger(deepspace);
+            console.log("triggered");
+            cll = false;
+        }
+    }
     render();
 }
 let minimapsize = 100;
@@ -167,4 +180,11 @@ function render(){
     renderPlayer(c,player,camera,keys,units);
     minimap({size: minimapsize, offset: 15, zoom: 25}, parseInt(destinationSelect.value),c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier);
     renderNavTools(c,player,camera,planets,parseInt(destinationSelect.value),minimapsize,text,units,radiusMultiplier);
+    if(!cll){
+        c.save();
+        c.globalAlpha = deepspace.animation.value;
+        c.fillStyle = "black";
+        c.fillRect(-units.xmax,-units.ymax, canvas.width,canvas.height);
+        c.restore();
+    }
 }
