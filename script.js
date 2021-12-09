@@ -17,11 +17,12 @@ WebFont.load({
 });
 
 
-import { minimap} from "./modules/renderers/minimap.js";
-import { renderNavTools} from "./modules/renderers/navui.js";
-import { renderPlanets} from "./modules/renderers/planet.js";
-import { renderPlayer} from "./modules/renderers/player.js";
-import { renderStars} from "./modules/renderers/stars.js";
+import { minimap } from "./modules/renderers/minimap.js";
+import { renderNavTools } from "./modules/renderers/navui.js";
+import { renderPlanets } from "./modules/renderers/planet.js";
+import { renderPlayer } from "./modules/renderers/player.js";
+import { renderStars } from "./modules/renderers/stars.js";
+import { renderEffects } from "./modules/renderers/effects.js";
 
 import {
     roundedRect,
@@ -165,19 +166,14 @@ function update(change){
     render();
 }
 let minimapsize = 100;
+
 function render(){
     c.clearRect(-units.xmax,-units.ymax, canvas.width,canvas.height)
-    let universe = c.createLinearGradient(0,-units.ymax, units.xmax + 200,0);
-    universe.addColorStop(0, "#110218");
-    universe.addColorStop(.33, "#0a0a24");
-    universe.addColorStop(.9, "#090212");
-    universe.addColorStop(1, "#01110b");
-    c.fillStyle = universe;
-    c.fillRect(-units.xmax,-units.ymax,canvas.width,canvas.height);
-
+    
     renderStars(c,camera, units);
-    renderPlanets(c,planets,camera,units,radiusMultiplier, gravityMultiplier, atmosphereMultipier);
+    renderEffects(c,planets,camera,units,radiusMultiplier, gravityMultiplier, atmosphereMultipier);
     renderPlayer(c,player,camera,keys,units);
+    renderPlanets(c,planets,camera,units,radiusMultiplier, gravityMultiplier, atmosphereMultipier);
     minimap({size: minimapsize, offset: 15, zoom: 25}, parseInt(destinationSelect.value),c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier);
     renderNavTools(c,player,camera,planets,parseInt(destinationSelect.value),minimapsize,text,units,radiusMultiplier);
     if(!cll){

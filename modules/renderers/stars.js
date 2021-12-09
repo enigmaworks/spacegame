@@ -5,11 +5,20 @@ for(let i = 0; i<90000; i++){
 }
 
 export function renderStars(c,camera,units){
+    let universe = c.createLinearGradient(0,-units.ymax, units.xmax + 200,0);
+    universe.addColorStop(0, "#110218");
+    universe.addColorStop(.33, "#0a0a24");
+    universe.addColorStop(.9, "#090212");
+    universe.addColorStop(1, "#01110b");
+
+    c.fillStyle = universe;
+    c.fillRect(-units.xmax,-units.ymax,canvas.width,canvas.height);
+    
     c.fillStyle = "white";
     c.save();
     stars.forEach((star,num)=>{
-        let xPos = ((star.x * 4500) - 3500/2) * 2;
-        let yPos = ((star.y * 4500) - 3500/2) * 2;
+        let xPos = ((star.x * 4500) - 4500/2) * 2;
+        let yPos = ((star.y * 4500) - 4500/2) * 2;
         let size;
         if(num % 100 === 0){
             xPos -= camera.x/12;
