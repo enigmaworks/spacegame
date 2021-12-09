@@ -139,9 +139,8 @@ document.body.addEventListener("keyup", (e)=>{
 
 function loop(){
     let change = Date.now() - time;
-    update(change);
-    render();
     time = Date.now();
+    update(change);
     requestAnimationFrame(loop);
 }
 
