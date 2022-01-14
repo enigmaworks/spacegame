@@ -88,9 +88,9 @@ export function gravity(player,planets,units,radiusMultiplier, gravityMultiplier
     Object.values(planets).forEach((planet, id)=>{
         let dist = units.distance(planet.x,planet.y,player.x,player.y);
         let gravityDistance = player.collisionRadius + ((planet.size * radiusMultiplier) * gravityMultiplier);
-        if(dist > player.nearestPlanet.distance){
+        if(dist < player.nearestPlanet.distance){
             player.nearestPlanet.id = id;
-            player.nearestPlanet.distance = planet;
+            player.nearestPlanet.distance = dist;
         }
         if(dist <= gravityDistance){
             let xDist = units.distance(player.x,0,planet.x,0);

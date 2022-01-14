@@ -10,12 +10,6 @@ export function renderNavTools(c,player,camera,planets,destination,minimapsize,t
     // text(`${player.currentPlanet}`, units.xmax - 230,-units.ymax + 30,{align: "left", maxwidth: 200, color: "white"})
     // text(player.currentMakeup, -units.xmax + 15,-units.ymax + 115,{align: "left", maxwidth: 250})
 
-    if(planets[player.nearestPlanet.id]){
-        console.log("yey");
-        let planet = planets[player.nearestPlanet.id];
-        text(planet.name, units.xmax - minimapsize*2 - 20, units.ymax - minimapsize*2);
-    }
-
     /*          COMPASS             */
     //compass base
     c.beginPath();
