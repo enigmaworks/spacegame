@@ -2,7 +2,7 @@ let img = document.createElement("img");
 img.src = "../imgs/venustile.png";
 
 export let radiusMultiplier = 22;
-export let gravityMultiplier = 2;
+export let gravityMultiplier = 1.8;
 export let rotationMultiplier = 10;
 export let atmosphereMultipier = 1.8;
 
@@ -26,7 +26,7 @@ export let planets = [
     {
         size: 28,
         x: 0,
-        y: 3800,
+        y: 500,
         rotation: 0,
         orbitX: 0,
         orbitY: 0,

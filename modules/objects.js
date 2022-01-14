@@ -2,8 +2,8 @@
 export let player = {
     direction: 180,
     speed: 0,
-    engineSpeed: 3.15,
-    boosterSpeed: 4,
+    engineSpeed: 1.15,
+    boosterSpeed: 1.8,
     x: 0,
     y: 0,
     rotationMomentum: 0,

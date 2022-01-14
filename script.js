@@ -196,7 +196,7 @@ function update(change){
             cll = false;
         }
     }
-    render();   
+    render();
 }
 let minimapsize = 100;
 

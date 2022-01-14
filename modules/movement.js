@@ -6,47 +6,53 @@ export function playerMovement(change,player,keys){
     } else {
         player.rotationMomentum *= .97;
     }
-    let speedMultiplier;
+    let speedMultiplier = 1;
+    let engineBoostX = 0;
+    let engineBoostY = 0;
     if(keys.up){
         if(keys.space){
             speedMultiplier = player.boosterSpeed;
         } else {
             speedMultiplier = player.engineSpeed;
         }
-        player.speedMultiplier = speedMultiplier;
         if(player.direction === 0 || player.direction === 360){
-            player.yMomentum += 1 * speedMultiplier;
+            engineBoostY = 1;
         } else if(player.direction === 90){
-            player.xMomentum -= 1 * speedMultiplier;
+            engineBoostX = -1;
         } else if(player.direction === 180){
-            player.yMomentum -= 1 * speedMultiplier;
+            engineBoostY = -1;
         } else if(player.direction === 270){
-            player.xMomentum += 1 * speedMultiplier;
+            engineBoostX = 1;
         } else if(player.direction < 90 && player.direction > 0){
-            player.xMomentum += Math.cos((player.direction - 90) * (Math.PI/180)) * -1 * speedMultiplier;
-            player.yMomentum += Math.sin((player.direction - 90) * (Math.PI/180)) * -1 * speedMultiplier;
+            engineBoostX = -(Math.cos((player.direction - 90) * (Math.PI/180)));
+            engineBoostY = -(Math.sin((player.direction - 90) * (Math.PI/180)));
         } else if(player.direction < 180 && player.direction > 90){
-            player.xMomentum += Math.sin((player.direction - 180) * (Math.PI/180)) * speedMultiplier;
-            player.yMomentum += Math.cos((player.direction - 180) * (Math.PI/180)) * -1 * speedMultiplier;
+            engineBoostX = Math.sin((player.direction - 180) * (Math.PI/180));
+            engineBoostY = -(Math.cos((player.direction - 180) * (Math.PI/180)));
         } else if(player.direction < 270 && player.direction > 180){
-            player.xMomentum += Math.cos((player.direction - 270) * (Math.PI/180)) * speedMultiplier;
-            player.yMomentum += Math.sin((player.direction - 270) * (Math.PI/180)) * speedMultiplier;
+            engineBoostX = Math.cos((player.direction - 270) * (Math.PI/180));
+            engineBoostY = Math.sin((player.direction - 270) * (Math.PI/180));
         } else if(player.direction < 360 && player.direction > 270){
-            player.xMomentum += Math.sin((player.direction - 360) * (Math.PI/180)) * -1 * speedMultiplier;
-            player.yMomentum += Math.cos((player.direction - 360) * (Math.PI/180)) * speedMultiplier;
+            engineBoostX = -(Math.sin((player.direction - 360) * (Math.PI/180)));
+            engineBoostY = Math.cos((player.direction - 360) * (Math.PI/180));
         }
+        player.engineBoostX = engineBoostX;
+        player.engineBoostY = engineBoostY;
     }
-    
-    let multiplier = 0.001;
+    player.xMomentum += engineBoostX * speedMultiplier;
+    player.yMomentum += engineBoostY * speedMultiplier;
+
+    let multiplier = 0.002;
     let rotateMultiplier = 0.005 * change;
-    multiplier *= change;
     player.speed = Math.sqrt((player.xMomentum**2) + (player.yMomentum**2));
     player.direction += player.rotationMomentum * rotateMultiplier;
-    player.x += player.xMomentum * multiplier;
-    player.y += player.yMomentum * multiplier;
-    player.xMomentum *= .999;
-    player.yMomentum *= .999;
-
+    player.x += (player.xMomentum * multiplier) * change;
+    player.y += (player.yMomentum * multiplier) * change;
+    let num = (change**-0.003);
+    player.xMomentum *= num;
+    player.yMomentum *= num;
+    
+    
     if (Math.abs(player.direction) > 360){
         player.direction = Math.abs(player.direction) - 360;
     }
@@ -136,7 +142,7 @@ export function gravity(player,planets,units,radiusMultiplier, gravityMultiplier
             if(deltaAngle < 180){
                 rotationInfluence *= -1;
             }
-            let gravityStregnth = ((((planet.size ** 1.9) * radiusMultiplier/4) *  .75) / (dist*2)) + 0.7;
+            let gravityStregnth = ((((planet.size ** 1.5) * radiusMultiplier/4) *  .5) / (dist*2)) + 0.7;
             
             player.currentPlanet.name = planet.name;
             player.currentPlanet.id = id;
