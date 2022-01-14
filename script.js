@@ -23,6 +23,7 @@ import { renderPlanets } from "./modules/renderers/planet.js";
 import { renderPlayer } from "./modules/renderers/player.js";
 import { renderStars } from "./modules/renderers/stars.js";
 import { renderEffects } from "./modules/renderers/effects.js";
+import { ParticleEmmitter } from "./modules/renderers/particles.js";
 
 import {
     roundedRect,
