@@ -149,7 +149,40 @@ let cll = true;
 
 let deepspace = AnimationHandler.create("deepsace", 0,1,500, {onEnd: ()=>{console.log("deepspace");}});
 
+function r(a, x, y, md){
+    let xx = x - (a*md.xVelocity) * 20;
+    let yy = y - (a*md.yVelocity) * 20;
+    c.fillStyle = `hsl(${40*(a) +10},100%,50%)`;
+    c.globalAlpha = (1 - a) * .25;
+    c.beginPath();
+    c.arc(xx,yy,1/(a*25) + 4,0,Math.PI *2);
+    c.fill();
+    c.globalAlpha = 1 - a;
+    c.arc(xx,yy,1/(a*25) + 2,0,Math.PI *2);
+    c.closePath();
+    c.globalAlpha = 1;
+}
+let test = new ParticleEmmitter(0,0,r, {
+    minLife: 200,
+    maxLife: 1000,
+    flow: 1,
+    areaSpread: 10,
+    angle: player.direction,
+    usePlayerCoords: false,
+    useWorldCoords: false,
+});
+
+let counter = 0;
 function update(change){
+    counter++;
+    test.move(player.x,player.y);
+    test.maxLife = (500 - (player.speed*2)) / 4;
+    test.flow = ((player.speed**1.5)/100) + 40;
+    test.angle = units.toRad(player.direction);
+    if(keys.up){
+        test.emit();
+    }
+    test.flow = player.speed + 1;
     movePlanets(planets,change,rotationMultiplier);
     gravity(player,planets,units,radiusMultiplier, gravityMultiplier);
     playerMovement(change,player,keys);
@@ -163,7 +196,7 @@ function update(change){
             cll = false;
         }
     }
-    render();
+    render();   
 }
 let minimapsize = 100;
 
@@ -172,6 +205,7 @@ function render(){
     
     renderStars(c,camera, units);
     renderEffects(c,planets,camera,units,radiusMultiplier, gravityMultiplier, atmosphereMultipier);
+    test.render();
     renderPlayer(c,player,camera,keys,units);
     renderPlanets(c,planets,camera,units,radiusMultiplier, gravityMultiplier, atmosphereMultipier);
     minimap({size: minimapsize, offset: 15, zoom: 25}, parseInt(destinationSelect.value),c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier);
