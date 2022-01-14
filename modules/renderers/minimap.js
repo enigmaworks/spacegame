@@ -14,6 +14,12 @@ export function minimap(settings = {},destination = null, c,player,camera,planet
     c.rect(-size,-size,size*2,size*2)
     c.stroke();
     c.fill();
+    c.strokeStyle = "red"
+    c.beginPath();
+    c.moveTo(-size,-size)
+    c.lineTo(zoom,-size);
+    c.closePath();
+    c.stroke();
 
     let inset = 0;
     let clip = new Path2D();
@@ -89,7 +95,7 @@ export function minimap(settings = {},destination = null, c,player,camera,planet
     c.save();
     c.rotate(units.toRad(player.direction));
     c.rotate(Math.PI/2);
-    c.drawImage(sprite,-40/zoom,-100/zoom,200/zoom,200/zoom);
+    c.drawImage(sprite,-20/zoom,-50/zoom,100/zoom,100/zoom);
     c.restore();
 
     let p = 5; //padding from edge
@@ -126,5 +132,12 @@ export function minimap(settings = {},destination = null, c,player,camera,planet
     c.closePath();
     c.fill();
     c.restore();
+    if(planets[player.nearestPlanet.id]){
+        let p = planets[player.nearestPlanet.id];
+        c.globalAlpha = .75;
+        text(`Nearest Planet: ${p.name}`, -size + 5, -size + 10, {color: "white", size: size/40 + 8, align: "left"});
+        text(`Distance: ${Math.round(player.nearestPlanet.distance * 10)/100}`, -size + 5, -size + (size/40 + 8) + 12, {color: "white", size: size/40 + 8, align: "left"});
+        c.globalAlpha = 1;
+    }
     c.restore();
 }

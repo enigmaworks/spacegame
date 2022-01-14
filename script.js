@@ -202,13 +202,14 @@ let minimapsize = 100;
 
 function render(){
     c.clearRect(-units.xmax,-units.ymax, canvas.width,canvas.height)
-    
+    let zoom = ((player.nearestPlanet.distance**0.5) * .11) + 8;
+    zoom = zoom > 30 ? 30 : zoom;
     renderStars(c,camera, units);
     renderEffects(c,planets,camera,units,radiusMultiplier, gravityMultiplier, atmosphereMultipier);
     test.render();
     renderPlayer(c,player,camera,keys,units);
     renderPlanets(c,planets,camera,units,radiusMultiplier, gravityMultiplier, atmosphereMultipier);
-    minimap({size: minimapsize, offset: 15, zoom: 25}, parseInt(destinationSelect.value),c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier);
+    minimap({size: minimapsize, offset: 15, zoom: zoom}, parseInt(destinationSelect.value),c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier);
     renderNavTools(c,player,camera,planets,parseInt(destinationSelect.value),minimapsize,text,units,radiusMultiplier);
     if(!cll){
         c.save();
