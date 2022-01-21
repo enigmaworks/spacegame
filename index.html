@@ -1,107 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8" \>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" \>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" \>
-    
-    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-    
-    <script src="./script.js" type="module" defer></script>
-  
-    <!-- Primary Meta Tags -->
-    <title>The Cosmos</title>
-    <meta name="title" content="The Cosmos">
-    <meta name="description" content="Blast your way through the cosmos, discovering planets and space stations in an original space sim!">
+    <head>
+        <meta charset="UTF-8" \ />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" \ />
+        <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0"
+            \
+        />
 
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://enigmastudios.tk/">
-    <meta property="og:title" content="The Cosmos">
-    <meta property="og:description" content="Blast your way through the cosmos, discovering planets and space stations in an original space sim!">
-    <meta property="og:image" content="https://enigmaworks.github.io/spacegame/imgs/card.png">
+        <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
 
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://enigmastudios.tk/">
-    <meta property="twitter:title" content="The Cosmos">
-    <meta property="twitter:description" content="Blast your way through the cosmos, discovering planets and space stations in an original space sim!">
-    <meta property="twitter:image" content="https://enigmaworks.github.io/spacegame/imgs/card.png">
-   <style>
-        *{
-            margin: 0;
-            box-sizing: border-box;
-            font-family: 'Teko', sans-serif;
-            font-kerning: 1.3em;
-            user-select: none;
-        }
-        body,html{
-            overflow: hidden;
-            width: 100vw;
-            height: 100vh;
-        }
-        canvas{
-            width: 100vw;
-            height: 100vh;
-            object-fit: contain;
-            position: absolute;
-        }
-        p{
-            position: absolute;
-            color: gray;
-            bottom: 1em;
-            right: 1em;
-            z-index: 1;
-        }
-        .spinner{
-            z-index: -1;
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            top: calc(50% - 50px);
-            left: calc(50% - 50px);
-            border-radius: 100px;
-            border: 10px solid lightgray;
-            clip-path: polygon(49% 43%, 100% 0, 100% 100%, 0 100%, 0 0);
-            animation: spin 600ms ease-in-out infinite;
-        }
-        p{
-            z-index: -1;
-            position: absolute;
-            top: calc(50% + 75px);
-            left: 50%;
-            width: max-content;
-            height: max-content;
-            transform: translate(-50%,-50%);
-            color: lightgray;
-            font-weight: 800;
-        }
-        select{
-            position: absolute;
-            z-index: 1;
-            bottom: 1rem;
-            right: 1rem;
-            font-size: 1.15rem;
-            letter-spacing: .02em;
-            padding: .15em 1em;
-        }
-        @keyframes spin {
-            from{
-                transform: rotate(0deg);
+        <script src="./script.js" type="module" defer></script>
+
+        <!-- Primary Meta Tags -->
+        <title>The Cosmos</title>
+        <meta name="title" content="The Cosmos" />
+        <meta
+            name="description"
+            content="Blast your way through the cosmos, discovering planets and space stations in an original space sim!"
+        />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://enigmastudios.tk/" />
+        <meta property="og:title" content="The Cosmos" />
+        <meta
+            property="og:description"
+            content="Blast your way through the cosmos, discovering planets and space stations in an original space sim!"
+        />
+        <meta
+            property="og:image"
+            content="https://enigmaworks.github.io/spacegame/imgs/card.png"
+        />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content="https://enigmastudios.tk/" />
+        <meta property="twitter:title" content="The Cosmos" />
+        <meta
+            property="twitter:description"
+            content="Blast your way through the cosmos, discovering planets and space stations in an original space sim!"
+        />
+        <meta
+            property="twitter:image"
+            content="https://enigmaworks.github.io/spacegame/imgs/card.png"
+        />
+        <style>
+            * {
+                margin: 0;
+                box-sizing: border-box;
+                font-family: "Teko", sans-serif;
+                font-kerning: 1.3em;
+                user-select: none;
             }
-            to{
-                transform: rotate(360deg);
+            body,
+            html {
+                overflow: hidden;
+                width: 100vw;
+                height: 100vh;
             }
-        }
-    </style>
-</head>
-<body>
-    <select name="chooseplanet" id="planetchooser">
-        <option value="lol">select destination</option>
-    </select>
-    <div class="spinner"></div>
-    <p aria-hidden>Loading Reasources</p>
-    <!-- test comment -->
-    <!-- <p>Modified rocket icon from <a href="https://fontawesome.com/v5.15/icons/space-shuttle?style=solid">fontawesome</a>. <a href="https://fontawesome.com/license">License</a></p> -->
-</body>
+            canvas {
+                width: 100vw;
+                height: 100vh;
+                object-fit: contain;
+                position: absolute;
+            }
+            p {
+                position: absolute;
+                color: gray;
+                bottom: 1em;
+                right: 1em;
+                z-index: 1;
+            }
+            .spinner {
+                z-index: -1;
+                position: absolute;
+                width: 100px;
+                height: 100px;
+                top: calc(50% - 50px);
+                left: calc(50% - 50px);
+                border-radius: 100px;
+                border: 10px solid lightgray;
+                clip-path: polygon(49% 43%, 100% 0, 100% 100%, 0 100%, 0 0);
+                animation: spin 600ms ease-in-out infinite;
+            }
+            p {
+                z-index: -1;
+                position: absolute;
+                top: calc(50% + 75px);
+                left: 50%;
+                width: max-content;
+                height: max-content;
+                transform: translate(-50%, -50%);
+                color: lightgray;
+                font-weight: 800;
+            }
+            select {
+                position: absolute;
+                z-index: 1;
+                bottom: 1rem;
+                right: 1rem;
+                font-size: 1.15rem;
+                letter-spacing: 0.02em;
+                padding: 0.15em 1em;
+            }
+            @keyframes spin {
+                from {
+                    transform: rotate(0deg);
+                }
+                to {
+                    transform: rotate(360deg);
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <select name="chooseplanet" id="planetchooser">
+            <option value="lol">select destination</option>
+        </select>
+        <div class="spinner"></div>
+        <p aria-hidden>Loading Reasources</p>
+        <!-- test comment -->
+        <!-- <p>Modified rocket icon from <a href="https://fontawesome.com/v5.15/icons/space-shuttle?style=solid">fontawesome</a>. <a href="https://fontawesome.com/license">License</a></p> -->
+    </body>
 </html>

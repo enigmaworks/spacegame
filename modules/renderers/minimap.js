@@ -1,32 +1,48 @@
-let sprite = document.createElement("img")
+let sprite = document.createElement("img");
 sprite.src = "./imgs/sprite.svg";
 
-export function minimap(settings = {},destination = null, c,player,camera,planets,text,units,radiusMultiplier, gravityMultiplier){
+export function minimap(
+    settings = {},
+    destination = null,
+    c,
+    player,
+    camera,
+    planets,
+    text,
+    units,
+    radiusMultiplier,
+    gravityMultiplier
+) {
     let size = settings.size || 75;
     let offset = settings.offset || 25;
     let zoom = settings.zoom || 10;
 
     c.save();
-    c.translate(-units.xmax + (offset + size),units.ymax - (offset + size)); // bottom left of screen
+    c.translate(-units.xmax + (offset + size), units.ymax - (offset + size)); // bottom left of screen
     c.beginPath();
-    c.strokeStyle = "#fffb"
-    c.fillStyle = "#111b" // semitransparent black
-    c.rect(-size,-size,size*2,size*2)
+    c.strokeStyle = "#fffb";
+    c.fillStyle = "#111b"; // semitransparent black
+    c.rect(-size, -size, size * 2, size * 2);
     c.stroke();
     c.fill();
-    c.strokeStyle = "red"
+    c.strokeStyle = "red";
     c.beginPath();
-    c.moveTo(-size,-size)
-    c.lineTo(zoom,-size);
+    c.moveTo(-size, -size);
+    c.lineTo(zoom, -size);
     c.closePath();
     c.stroke();
 
     let inset = 0;
     let clip = new Path2D();
-    clip.rect(-size - inset,-size - inset,size*2 +2*inset,size*2 + 2*inset);
+    clip.rect(
+        -size - inset,
+        -size - inset,
+        size * 2 + 2 * inset,
+        size * 2 + 2 * inset
+    );
     c.clip(clip);
-    
-    let ratio = 1/zoom; // screen pixels per map pixel
+
+    let ratio = 1 / zoom; // screen pixels per map pixel
 
     let cx = camera.x * ratio;
     let cy = camera.y * ratio;
@@ -35,108 +51,125 @@ export function minimap(settings = {},destination = null, c,player,camera,planet
     let destY;
     let destDirection;
     let destDistance;
-    if(planets[destination]){
-        destX = (planets[destination].x * ratio) - cx;
-        destY = (planets[destination].y * ratio) - cy;
-        destDirection = units.direction(0,0,destX,destY);
-        destDistance = units.distance(0,0,destX,destY);
+    if (planets[destination]) {
+        destX = planets[destination].x * ratio - cx;
+        destY = planets[destination].y * ratio - cy;
+        destDirection = units.direction(0, 0, destX, destY);
+        destDistance = units.distance(0, 0, destX, destY);
     }
 
-    planets.forEach((planet,id)=>{
-        let px = (planet.x * ratio) - cx;
-        let py =( planet.y * ratio) - cy;
-        let planetRadius = (planet.size * radiusMultiplier) * ratio
-        if((px + (planetRadius * gravityMultiplier) > -size) &&
-            (px - (planetRadius * gravityMultiplier) < size) &&
-            (py + (planetRadius * gravityMultiplier) > -size) &&
-            (py - (planetRadius * gravityMultiplier) < size) ){
+    planets.forEach((planet, id) => {
+        let px = planet.x * ratio - cx;
+        let py = planet.y * ratio - cy;
+        let planetRadius = planet.size * radiusMultiplier * ratio;
+        if (
+            px + planetRadius * gravityMultiplier > -size &&
+            px - planetRadius * gravityMultiplier < size &&
+            py + planetRadius * gravityMultiplier > -size &&
+            py - planetRadius * gravityMultiplier < size
+        ) {
             c.save();
 
             c.translate(px, py); // center of planet on map
             c.rotate(units.toRad(planet.rotation));
             c.beginPath();
-            c.moveTo(0,0);
+            c.moveTo(0, 0);
 
             c.beginPath();
-            c.arc(0,0,planetRadius * gravityMultiplier,0,Math.PI*2);
+            c.arc(0, 0, planetRadius * gravityMultiplier, 0, Math.PI * 2);
             c.strokeStyle = "lightgray";
-            c.lineWidth = .75;
-            c.globalAlpha = .5;
+            c.lineWidth = 0.75;
+            c.globalAlpha = 0.5;
             c.stroke();
 
             let fill = "#888"; // backup fill
-            if(planet.fill.type === "color"){
+            if (planet.fill.type === "color") {
                 fill = planet.fill.f;
             }
-            if(planet.fill.type === "img"){
+            if (planet.fill.type === "img") {
                 fill = c.createPattern(planet.fill.f, "repeat");
             }
-            if(planet.fill.type === "gradient"){
+            if (planet.fill.type === "gradient") {
                 let rad = planet.size * radiusMultiplier;
                 //create gradient from corner to corner of planet bounding box
-                fill = c.createLinearGradient(size,size,-size,-size);
-                Object.values(planet.fill.f).forEach((stop)=>{
-                    fill.addColorStop(stop.s,stop.c);
+                fill = c.createLinearGradient(size, size, -size, -size);
+                Object.values(planet.fill.f).forEach((stop) => {
+                    fill.addColorStop(stop.s, stop.c);
                 });
             }
-            c.fillStyle = fill; 
+            c.fillStyle = fill;
             c.beginPath();
             if (id === player.currentPlanet.id) c.globalAlpha = 1;
-            else c.globalAlpha = .4;
-            c.arc(0,0,planetRadius,0,Math.PI*2);
+            else c.globalAlpha = 0.4;
+            c.arc(0, 0, planetRadius, 0, Math.PI * 2);
             c.fill();
             c.closePath();
-            
+
             c.globalAlpha = 1;
-            text(planet.name, 0,0, {align: "center", baseline: "alphabetic",size: (planet.size/planet.name.length)/2 + 7, color: "white", maxwidth: planetRadius});
+            text(planet.name, 0, 0, {
+                align: "center",
+                baseline: "alphabetic",
+                size: planet.size / planet.name.length / 2 + 7,
+                color: "white",
+                maxwidth: planetRadius,
+            });
             c.restore();
         }
     });
     c.save();
     c.rotate(units.toRad(player.direction));
-    c.rotate(Math.PI/2);
-    c.drawImage(sprite,-20/zoom,-50/zoom,100/zoom,100/zoom);
+    c.rotate(Math.PI / 2);
+    c.drawImage(sprite, -20 / zoom, -50 / zoom, 100 / zoom, 100 / zoom);
     c.restore();
 
     let p = 5; //padding from edge
     let x = size - p;
     let y = size - p;
-    if(Math.abs(destX) > size - p || Math.abs(destY) > size - p){
-        if(destX < -size + p){
+    if (Math.abs(destX) > size - p || Math.abs(destY) > size - p) {
+        if (destX < -size + p) {
             x = -size + p;
-        } else if (Math.abs(destX) < size - p){
+        } else if (Math.abs(destX) < size - p) {
             x = destX;
         }
-        if(destY < -size + p){
+        if (destY < -size + p) {
             y = -size + p;
-        } else if (Math.abs(destY) < size - p){
+        } else if (Math.abs(destY) < size - p) {
             y = destY;
         }
     } else {
         x = destX;
         y = destY;
     }
-    let markerSize = 6/2**(destDistance/100);
-    if(markerSize < .9) markerSize = .9;
+    let markerSize = 6 / 2 ** (destDistance / 100);
+    if (markerSize < 0.9) markerSize = 0.9;
     if (markerSize > 1.6) markerSize = 1.6;
-    if(destDistance/40 - 1 < markerSize) markerSize = destDistance/40 - 1;
-    if(markerSize <= .75) markerSize = 0;
+    if (destDistance / 40 - 1 < markerSize) markerSize = destDistance / 40 - 1;
+    if (markerSize <= 0.75) markerSize = 0;
     c.save();
-    c.translate(x,y);
-    c.rotate(destDirection)
+    c.translate(x, y);
+    c.rotate(destDirection);
     c.beginPath();
     c.fillStyle = "red";
-    c.moveTo(-4 * markerSize,10 * markerSize);
-    c.lineTo(0,0);
-    c.lineTo(4 * markerSize,10 * markerSize);
+    c.moveTo(-4 * markerSize, 10 * markerSize);
+    c.lineTo(0, 0);
+    c.lineTo(4 * markerSize, 10 * markerSize);
     c.closePath();
     c.fill();
     c.restore();
-    if(planets[player.nearestPlanet.id]){
+    if (planets[player.nearestPlanet.id]) {
         let p = planets[player.nearestPlanet.id];
-        c.globalAlpha = .75;
-        text(`Nearest Planet: ${p.name}`, -size + 5, -size + 10, {color: "white", size: size/40 + 8, align: "left"});
-        text(`Distance: ${Math.round(player.nearestPlanet.distance * 10)/100}`, -size + 5, -size + (size/40 + 8) + 12, {color: "white", size: size/40 + 8, align: "left"});
+        c.globalAlpha = 0.75;
+        text(`Nearest Planet: ${p.name}`, -size + 5, -size + 10, {
+            color: "white",
+            size: size / 40 + 8,
+            align: "left",
+        });
+        text(
+            `Distance: ${Math.round(player.nearestPlanet.distance * 10) / 100}`,
+            -size + 5,
+            -size + (size / 40 + 8) + 12,
+            { color: "white", size: size / 40 + 8, align: "left" }
+        );
         c.globalAlpha = 1;
     }
     c.restore();

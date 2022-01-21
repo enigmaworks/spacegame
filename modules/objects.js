@@ -1,9 +1,8 @@
-
 export let player = {
     direction: 180,
     speed: 0,
-    engineSpeed: 1.15,
-    boosterSpeed: 1.8,
+    engineSpeed: 1.2,
+    boosterSpeed: 1.9,
     x: 0,
     y: 0,
     rotationMomentum: 0,
@@ -31,14 +30,14 @@ export let player = {
     },
     size: 32,
     speedMultiplier: 0,
-}
+};
 
 export let camera = {
     x: 0,
     y: 0,
     xMomentum: 0,
     yMomentum: 0,
-}
+};
 
 export let keys = {
     up: false,

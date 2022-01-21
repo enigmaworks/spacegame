@@ -1,4 +1,4 @@
-import {AnimationHandler} from "../animators.js"
+import { AnimationHandler } from "../animators.js";
 import { camera, player } from "../objects.js";
 export class ParticleEmmitter {
     particles = [];
@@ -8,7 +8,7 @@ export class ParticleEmmitter {
     angle = 0;
     angleSpread = 0;
     minVelocity = 0;
-    maxVelocity = 0
+    maxVelocity = 0;
     drag = 0;
     minFlowRate = 0;
     maxFlowRate = 0;
@@ -16,7 +16,7 @@ export class ParticleEmmitter {
     maxLife = 0;
     variations = 0;
     renderer;
-    constructor (x,y, renderer, options = {}) {
+    constructor(x, y, renderer, options = {}) {
         this.x = x;
         this.y = y;
         this.renderer = renderer;
@@ -34,46 +34,67 @@ export class ParticleEmmitter {
         this.uPC = options.usePlayerCoords || false;
         this.variations = 1;
     }
-    emit (movementData = {}) {
-        let flow = (Math.random() * (this.maxFlowRate - this.minFlowRate + 1)) + this.minFlowRate
+    emit(movementData = {}) {
+        let flow =
+            Math.random() * (this.maxFlowRate - this.minFlowRate + 1) +
+            this.minFlowRate;
         for (let i = 0; i < flow; i++) {
-            let variation = Math.floor(Math.random() * this.variations)
-            let spreadX = (Math.random() * (this.areaSpread)) - this.areaSpread/2;
-            let spreadY = (Math.random() * (this.areaSpread)) - this.areaSpread/2;
-            let angleDisplacement = (Math.random() * this.angleSpread) - this.angleSpread/2;
-            let velocity = (Math.random() * (this.maxVelocity - this.minVelocity + 1)) + this.minVelocity;
-            let angle = this.angle+angleDisplacement
+            let variation = Math.floor(Math.random() * this.variations);
+            let spreadX = Math.random() * this.areaSpread - this.areaSpread / 2;
+            let spreadY = Math.random() * this.areaSpread - this.areaSpread / 2;
+            let angleDisplacement =
+                Math.random() * this.angleSpread - this.angleSpread / 2;
+            let velocity =
+                Math.random() * (this.maxVelocity - this.minVelocity + 1) +
+                this.minVelocity;
+            let angle = this.angle + angleDisplacement;
 
-            let life = (Math.random() * (this.maxLife - this.minLife + 1)) + this.minLife;     
-            let particle = new Particle(life, variation, this.x + spreadX,this.y + spreadY, this.usingWorldCoordinates,angle,-Math.sin(angle) * velocity,Math.cos(angle) * velocity,this.drag);
+            let life =
+                Math.random() * (this.maxLife - this.minLife + 1) +
+                this.minLife;
+            let particle = new Particle(
+                life,
+                variation,
+                this.x + spreadX,
+                this.y + spreadY,
+                this.usingWorldCoordinates,
+                angle,
+                -Math.sin(angle) * velocity,
+                Math.cos(angle) * velocity,
+                this.drag
+            );
             this.particles.push(particle);
         }
-        
     }
-    render () {
-        this.particles.forEach((particle, index)=>{
+    render() {
+        this.particles.forEach((particle, index) => {
             if (particle.animation.animation.done) {
                 this.particles.splice(index, 1);
             } else {
                 let x = particle.x;
-                x -= this.uWC ? 0 : camera.x ;
+                x -= this.uWC ? 0 : camera.x;
                 x += this.uPC ? player.x : 0;
 
                 let y = particle.y;
                 y -= this.uWC ? 0 : camera.y;
                 y += this.uPC ? player.y : 0;
-                
+
                 let movementData = {
                     xVelocity: particle.xVelocity,
                     yVelocity: particle.yVelocity,
                     direction: particle.angle,
                     drag: particle.drag,
                 };
-                this.renderer(particle.animation.animation.value, x, y, movementData);
+                this.renderer(
+                    particle.animation.animation.value,
+                    x,
+                    y,
+                    movementData
+                );
             }
         });
     }
-    move (x , y){
+    move(x, y) {
         this.x = x;
         this.y = y;
     }
@@ -81,16 +102,26 @@ export class ParticleEmmitter {
 
 export class Particle {
     life = 0;
-    variation =0;
+    variation = 0;
     x = 0;
     y = 0;
     angle = 0;
     xVelocity = 0;
-    yVelocity = 0
+    yVelocity = 0;
     drag = 0;
     usingWorldCoords;
     animation;
-    constructor (life, variation, x, y, usingWorldCoords, angle, xVelocity, yVelocity, drag){
+    constructor(
+        life,
+        variation,
+        x,
+        y,
+        usingWorldCoords,
+        angle,
+        xVelocity,
+        yVelocity,
+        drag
+    ) {
         this.life = life;
         this.variation = variation;
         this.x = x;
@@ -100,6 +131,8 @@ export class Particle {
         this.yVelocity = yVelocity;
         this.drag = drag;
         this.usingWorldCoords = usingWorldCoords;
-        this.animation = AnimationHandler.create("",0,1,life, {immediate: true});
+        this.animation = AnimationHandler.create("", 0, 1, life, {
+            immediate: true,
+        });
     }
 }

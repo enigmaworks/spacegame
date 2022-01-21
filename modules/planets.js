@@ -1,10 +1,12 @@
 let img = document.createElement("img");
 img.src = "../imgs/venustile.png";
 
-export let radiusMultiplier = 22;
-export let gravityMultiplier = 1.8;
-export let rotationMultiplier = 10;
-export let atmosphereMultipier = 1.8;
+export const radiusMultiplier = 22;
+export const gravityMultiplier = 1.8;
+export const gravityStregnth = 0.5;
+export const gravityFalloff = 1.5;
+export const rotationMultiplier = 10;
+export const atmosphereMultipier = 1.8;
 
 /*
  * size: number
@@ -17,11 +19,11 @@ export let atmosphereMultipier = 1.8;
  * type: string
  * makeup: string
  * fill:
- * { 
+ * {
  *  type: "gradient" || "color" || "img"
  *  f: "color" || img-element || {stop: {s: number, c: "color"} ...}}
  * atmosphere: "color"
-*/
+ */
 export let planets = [
     {
         size: 28,
@@ -33,12 +35,15 @@ export let planets = [
         name: "I-Pasiphaë",
         type: "",
         makeup: "",
-        fill: {type: "gradient", f: {
-            stop1: {s:0,c:"aqua"},
-            stop2:{s:1,c:"blue"},
-        }},
+        fill: {
+            type: "gradient",
+            f: {
+                stop1: { s: 0, c: "aqua" },
+                stop2: { s: 1, c: "blue" },
+            },
+        },
         stroke: "white",
-        atmosphere: "aqua"
+        atmosphere: "aqua",
     },
     {
         size: 30,
@@ -50,12 +55,15 @@ export let planets = [
         name: "Argo",
         type: " ",
         makeup: " ",
-        fill: {type: "gradient", f: {
-            stop1: {s:0,c:"darkred"},
-            stop2:{s:1,c:"orange"},
-        }},
+        fill: {
+            type: "gradient",
+            f: {
+                stop1: { s: 0, c: "darkred" },
+                stop2: { s: 1, c: "orange" },
+            },
+        },
         stroke: "white",
-        atmosphere: "orange"
+        atmosphere: "orange",
     },
     {
         size: 26,
@@ -67,12 +75,15 @@ export let planets = [
         name: "Lamiai Z4",
         type: " ",
         makeup: " ",
-        fill: {type: "gradient", f: {
-            stop1: {s:0,c:"indigo"},
-            stop2:{s:1,c:"steelblue"},
-        }},
+        fill: {
+            type: "gradient",
+            f: {
+                stop1: { s: 0, c: "indigo" },
+                stop2: { s: 1, c: "steelblue" },
+            },
+        },
         stroke: "white",
-        atmosphere: "indigo"
+        atmosphere: "indigo",
     },
     {
         size: 22,
@@ -84,12 +95,15 @@ export let planets = [
         name: "Alkyonides 18-89",
         type: " ",
         makeup: " ",
-        fill: {type: "gradient", f: {
-            stop1: {s:0,c:"wheat"},
-            stop2:{s:1,c:"rosybrown"},
-        }},
+        fill: {
+            type: "gradient",
+            f: {
+                stop1: { s: 0, c: "wheat" },
+                stop2: { s: 1, c: "rosybrown" },
+            },
+        },
         stroke: "white",
-        atmosphere: "sandybrown"
+        atmosphere: "sandybrown",
     },
     {
         size: 32,
@@ -101,12 +115,15 @@ export let planets = [
         name: "Frank's",
         type: "",
         makeup: "",
-        fill: {type: "gradient", f: {
-            stop1: {s:0,c:"darkgreen"},
-            stop2:{s:1,c:"green"},
-        }},
+        fill: {
+            type: "gradient",
+            f: {
+                stop1: { s: 0, c: "darkgreen" },
+                stop2: { s: 1, c: "green" },
+            },
+        },
         stroke: "white",
-        atmosphere: "green"
+        atmosphere: "green",
     },
     {
         size: 39,
@@ -118,12 +135,15 @@ export let planets = [
         name: "Styx",
         type: "",
         makeup: "",
-        fill: {type: "gradient", f: {
-            stop1: {s:0,c:"teal"},
-            stop2:{s:1,c:"darkturquoise"},
-        }},
+        fill: {
+            type: "gradient",
+            f: {
+                stop1: { s: 0, c: "teal" },
+                stop2: { s: 1, c: "darkturquoise" },
+            },
+        },
         stroke: "white",
-        atmosphere: "teal"
+        atmosphere: "teal",
     },
     {
         size: 19,
@@ -135,9 +155,8 @@ export let planets = [
         name: "Venus",
         type: "",
         makeup: "",
-        fill: {type: "img", f: img},
+        fill: { type: "img", f: img },
         stroke: "white",
-        atmosphere: "orange"
+        atmosphere: "orange",
     },
-    
-]
+];

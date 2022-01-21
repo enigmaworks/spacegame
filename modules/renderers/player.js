@@ -1,44 +1,26 @@
-let sprite = document.createElement("img")
+let sprite = document.createElement("img");
 sprite.src = "./imgs/sprite.svg";
 
-export function renderPlayer(c,player,camera,keys,units,hitbox=false){
+export function renderPlayer(c, player, camera, keys, units, hitbox = false) {
     c.save();
-    c.translate(0,0);
+    c.translate(0, 0);
     let screenX = player.x - camera.x;
     let screenY = player.y - camera.y;
-    c.translate(screenX,screenY);
+    c.translate(screenX, screenY);
     c.rotate(units.toRad(player.direction));
-    c.rotate(Math.PI/2);
-    let displacement = -player.size/3;
-    let rad = player.size * 0.12;
-    if(keys.up){
-        let gradient = c.createLinearGradient(displacement,0,displacement*1.65,0);
-        gradient.addColorStop(0,"hsl(25,100%,50%)")
-        gradient.addColorStop(1,"hsla(0,0%,0%,0)");
-        c.fillStyle = gradient;
+    c.rotate(Math.PI / 2);
+    let displacement = -player.size / 3;
+    c.drawImage(
+        sprite,
+        displacement,
+        displacement * 1.5,
+        player.size,
+        player.size
+    );
+    if (hitbox) {
         c.beginPath();
-        c.arc(displacement - .5,displacement/5,rad,0,Math.PI*2);
-        c.fill();
-        c.beginPath();
-        c.arc(displacement - .5,-displacement/5,rad,0,Math.PI*2);
-        c.fill();
-        if(keys.space){
-            let gradient = c.createLinearGradient(displacement,0,displacement*2.85,0);
-            gradient.addColorStop(0,"hsl(25,100%,50%)")
-            gradient.addColorStop(1,"hsla(0,0%,0%,0)");
-            c.fillStyle = gradient;
-            c.beginPath(); 
-            c.moveTo(displacement,rad * 1.3);
-            c.lineTo(displacement*2.75,0);
-            c.lineTo(displacement,-rad * 1.3);
-            c.fill();
-        }
-    }
-    c.drawImage(sprite,displacement,displacement*1.5,player.size,player.size);
-    if(hitbox){
-        c.beginPath();
-        c.fillStyle = "hsla(0,100%,60%,.2)"
-        c.arc(0,0,player.collisionRadius,0,Math.PI*2);
+        c.fillStyle = "hsla(0,100%,60%,.2)";
+        c.arc(0, 0, player.collisionRadius, 0, Math.PI * 2);
         c.fill();
     }
     c.restore();
